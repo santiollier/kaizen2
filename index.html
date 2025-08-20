@@ -8,13 +8,21 @@
     html,body{height:100%}
     body{
       margin:0; font-family: Arial, sans-serif;
-      background: #fff;
+      background: #b7c8d1;
       color:#222;
+
     }
     .wrap{
       max-width: 600px;
       margin: 32px auto;
       padding: 0 12px;
+    }
+    .results{
+      background-color: #6a976c;
+      color: #222;
+      border-radius: 20px ;
+    display: block;
+
     }
     .card{
       background: #fff;
@@ -50,7 +58,7 @@
     }
     button.primary:active{ background: #ddd; }
     .error{ color:#b00020; font-size:13px; margin-top:8px; }
-    .results{ margin-top:24px; text-align:center; }
+    .results{ margin-top:24px; text-align:center;  }
     .results h2{ font-size:18px; margin:8px 0 10px; }
     .results p{ color:#555; margin:0 0 10px; line-height:1.5; }
     .kpi{ margin-top:10px; border:1px solid #bbb; border-radius:8px; padding: 10px; text-align:left; color:#222; background:#fafafa; }
@@ -107,9 +115,13 @@
       return currencySymbol + ' ' + (Number(n).toFixed(2)).replace(/\B(?=(\d{3})+(?!\d))/g, '.');
     }
     function calcularInteres(amount, rate, years) {
-      
+      let tasamensual= rate /100 /12;
+     const cuota = years*12;
+     const coutamensual1= amount * (tasamensual * Math.pow(1+tasamensual,cuota)) / (Math.pow(1+ tasamensual,cuota)-1);
+     const totalPagado = coutamensual1*cuota;
+     const interesTotal = totalPagado-amount;
       return {
-        monthly: cuotaMensual.toFixed(2),
+        monthly: coutamensual1.toFixed(2),
         totalInterest: interesTotal.toFixed(2),
         totalPaid: totalPagado.toFixed(2)
       };
@@ -126,6 +138,7 @@
         <p style="margin-top:10px">Este cálculo es orientativo y no incluye gastos/impuestos adicionales.</p>
       `;
     }
+    
     form.addEventListener('submit', (e)=>{
       e.preventDefault();
       errorEl.textContent = '';
@@ -136,8 +149,8 @@
         errorEl.textContent = 'Completá todos los campos con valores válidos.';
         return;
       }
-      const result = calcularInteres(amount,rate,years);
-      renderResults(result);
+      const result = calcularInteres(amount,rate,years)
+      renderResults(result)
     });
     clearAll.addEventListener('click', (e)=>{
       e.preventDefault();
